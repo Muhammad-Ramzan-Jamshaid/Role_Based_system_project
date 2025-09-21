@@ -28,17 +28,13 @@
                         <td class="text-start border-b px-4 py-4 text-">{{$permission->id}}</td>
                         <td class="text-start border-b px-4 py-4">{{$permission->name}}</td>
                         <td class="text-start border-b px-4 py-4">{{$permission->created_at}}</td>
-                        <td class=" border-b px-4 py-3 flex gap-3 justify-center" >
-                             <button  class="bg-sky-800 text-white px-5 py-2 font-medium rounded">
+                        <td class="text-center border-b px-4" > <button  class="bg-sky-800 text-white px-5 py-2 font-medium rounded">
                         <a href="{{route('permissions.edit',$permission->id)}}">Edit</a></button>
-                         <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST">
-                          @csrf
-                             @method('DELETE')
-                        <button type="submit" class="bg-red-800 text-white px-5 py-2 font-medium rounded ">
-                         Delete
-                             </button>
-                            </form>
-
+                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="submit">Delete</button>
+</form>
                     </td>
                     </tr>
                     @endforeach
