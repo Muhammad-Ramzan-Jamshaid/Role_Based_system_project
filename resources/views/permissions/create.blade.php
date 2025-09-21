@@ -7,18 +7,21 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900">
-                <form action="{{  route('permissions.store')  }}" method="POST">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                  <form action="{{  route('permissions.store') }}" method="POST">
                     @csrf
-                      <label for="" class="text-lg font-medium">Name</label>
-                    <div class="my-3">
-                        <input type="text" name="name" class="border-grey-300 shadow-sm w-1/2 rounded-lg">
-                       @if(session('success'))
-                        <p class="text-green-600 font-medium">{{ session('success') }}</p>
-                         @endif
+                    <div>
+                        <label for="Name" class="text-lg font-medium">Name</label>
+                        <div class="my-4">
+                           <input type="text" placeholder="Enter name" name="name" class="border-grey-300 shadow-sm w-1/2 rounded">
+                        @error('name')
+                        <p class="text-red-400">{{$message}}</p>
+                        @enderror
+                        </div>
+
+                        <button class="bg-slate-600 text-white rounded p-3">Submit</button>
                     </div>
-                    <button class="bg-blue-600 p-3 mt-3 rounded-lg text-white ">Submit</button>
                   </form>
                 </div>
             </div>

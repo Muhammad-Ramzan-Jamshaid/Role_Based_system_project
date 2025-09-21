@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Validator;   
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 
@@ -9,11 +9,10 @@ class PermissionController extends Controller
 {
     
         public function index()
-{
-    $permissions = Permission::all();
-    return view('permissions.index', compact('permissions'));
-}
+    {
+        return view('permissions.list');
 
+         }
 
 
 
@@ -23,18 +22,23 @@ class PermissionController extends Controller
 
 
 
-    public function store(Request $request){
-     $validated = $request->validate([
-         
-        'name'=>'required|unique:permissions,name|max:10'
-     ]); 
-     Permission::create([
-        'name' => $validated['name'],
-    ]);
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required|unique:permissions,name|max:20'
+        ]);
 
-    // Redirect with success message
-    return redirect()->route('permissions.create')->with    ('success', 'Permission created successfully!');
-}
+        if ($validator->passes()) {
+            Permission::create([
+                'name' => $request->name,
+            ]);
+            return redirect()->route('permissions.index')->with('success', 'Permission created successfully!');
+        } else {
+            return redirect()->route('permissions.create')
+                             ->withInput()
+                             ->withErrors($validator);
+        }
+    }
 
 
     public function edit(){
@@ -46,8 +50,6 @@ class PermissionController extends Controller
     public function update(){
 
     }
-
-
 
 
     public function destroy(){
