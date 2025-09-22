@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
 
 
  // creating resource controller for the roles
- Route::resource('/roles',RoleController::class);
+ Route::resource('roles',RoleController::class);
 
 
 //permissions contoller 

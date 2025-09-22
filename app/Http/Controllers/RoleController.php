@@ -64,16 +64,46 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-       $roles = Role::with('permission');
-       return view('roles.create',compact('roles'));
+       $roles = Role::findorFail($id);
+       $haspermissions = $roles->permissions->pluck('name');
+       $permissions = Permission::orderBy('name','ASC')->get();
+       return view('roles.edit',compact('permissions','haspermissions','roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request,$id){
+       
+        $roles = Role::findorFail($id);
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required|unique:roles,name,'.$id.',id'
+
+        ]);
+
+        if ($validator->passes()) {
+                // Permission::create([
+                //     'name' => $request->name,]);
+                
+                $roles->name = $request->name;
+                $roles->save();
+              
+                if (!empty($request->permissions)) {
+                    $roles->syncPermissions($request->permissions);
+                }
+                else{
+                    $roles->syncPermissions([]);
+                }
+
+                return redirect()->route('roles.index')->with('success', 'Role updated successfully!');
+
+        } else {
+            return redirect()->route('permissions.edit',$id)
+                             ->withInput()
+                             ->withErrors($validator);
+        }
+
+          
     }
 
     /**
@@ -81,6 +111,10 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $roles = Role::findorFail($id);
+        $roles->delete();
+
+        return redirect()->route('roles.index')
+        ->with('success', 'roles deleted successfully!');
     }
 }

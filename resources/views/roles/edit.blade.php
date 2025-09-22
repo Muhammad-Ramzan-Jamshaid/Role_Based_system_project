@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between">   
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Roles / Create
+                Roles / Edit
             </h2>
             <button class="bg-slate-800 text-white px-5 py-3 font-medium rounded">
                 <a href="{{ route('roles.index') }}">Back to Listing</a>
@@ -16,8 +16,10 @@
                 <div class="p-6 text-gray-900">
 
                     <!-- Form -->
-                    <form action="{{ route('roles.store') }}" method="POST">
+                    <form action="{{ route('roles.update',$roles->id) }}" method="POST">
                         @csrf
+                           @method('PUT')
+
                         <div>
                             <!-- Role Name -->
                             <label for="name" class="text-lg font-medium">Role Name</label>
@@ -26,7 +28,7 @@
                                     type="text" 
                                     placeholder="Enter role name" 
                                     name="name" 
-                                    value="{{ old('name') }}"
+                                    value="{{ old('name',$roles->name)   }}"
                                     class="border-gray-300 shadow-sm w-1/2 rounded px-3 py-2"
                                 >
                                 @error('name')
@@ -37,13 +39,13 @@
                             <!-- Permissions List -->
                             <label class="text-lg font-medium">Assign Permissions</label>
                             <div class="grid grid-cols-4 my-4 gap-3">
-                            @if($permissions -> isNotEmpty())
+                            @if($permissions->isNotEmpty())
                             @foreach($permissions as $permission)
                                         <div class="flex items-center gap-2">
-                                            <input 
+                                            <input {{($haspermissions->contains($permission->name)) ?  'checked': '' }}
                                                 type="checkbox" 
                                                 id="permission-{{ $permission->id }}" 
-                                                value="{{ $permission->name }}"     
+                                                value="{{ $permission->name }}" 
                                                 name="permissions[]"
                                                 class="rounded"
                                             >
@@ -59,7 +61,7 @@
 
                             <!-- Submit Button -->
                             <button type="submit" class="bg-slate-600 text-white rounded p-3">
-                                Submit
+                                update
                             </button>
                         </div>
                     </form>
