@@ -98,8 +98,7 @@ class RoleController extends Controller
                 return redirect()->route('roles.index')->with('success', 'Role updated successfully!');
 
         } else {
-            return redirect()->route('permissions.edit',$id)
-                             ->withInput()
+            return redirect()->route('permissions.edit',$id)     ->withInput()
                              ->withErrors($validator);
         }
 
